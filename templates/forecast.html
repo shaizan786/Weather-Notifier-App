@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block title %}Forecast{% endblock %}
+{% block content %}
+<div class="p-4">
+  <h1 class="mb-4">3-Day Forecast</h1>
+
+  <!-- Flash messages -->
+  {% with messages = get_flashed_messages() %}
+    {% if messages %}
+      <div class="alert alert-warning">
+        {% for message in messages %}
+          <div>{{ message }}</div>
+        {% endfor %}
+      </div>
+    {% endif %}
+  {% endwith %}
+
+  <!-- Search Form for Forecast -->
+  <form method="POST" class="mb-4">
+    <div class="row g-2">
+      <div class="col-md-6 mb-3">
+        <input type="text" class="form-control" name="city" placeholder="Enter City Name">
+      </div>
+      <div class="col-auto">
+        <button type="submit" name="search" class="btn btn-primary">Search Forecast</button>
+      </div>
+    </div>
+  </form>
+
+  {% if weather %}
+  <div class="card mb-4 shadow-sm">
+    <div class="card-body">
+      <h5 class="card-title">Forecast for {{ weather.city }}</h5>
+      <div class="row">
+        {% for day in weather.forecast_days %}
+        <div class="col-md-4 text-center mb-3">
+          <img src="https:{{ day.icon }}" alt="Icon" width="40" height="40" /><br>
+          <strong>{{ day.date }}</strong><br>
+          <small>{{ day.low }}°C / {{ day.high }}°C</small>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

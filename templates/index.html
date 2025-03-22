@@ -1,0 +1,162 @@
+{% extends "base.html" %}
+{% block title %}Weather Home{% endblock %}
+{% block content %}
+<div class="p-4">
+  <h1 class="mb-4">Weather Notifier</h1>
+
+  <!-- Flash messages -->
+  {% with messages = get_flashed_messages() %}
+    {% if messages %}
+      <div class="alert alert-warning">
+        {% for message in messages %}
+          <div>{{ message }}</div>
+        {% endfor %}
+      </div>
+    {% endif %}
+  {% endwith %}
+
+  <!-- Search Form -->
+  <form method="POST" class="mb-4">
+    <div class="row g-2">
+      <div class="col-auto">
+        <input
+          type="text"
+          class="form-control"
+          name="city"
+          placeholder="Enter City Name"
+          value="{{ weather.city if weather }}"
+        />
+      </div>
+      <div class="col-auto">
+        <button type="submit" name="search" class="btn btn-primary">
+          Search Weather
+        </button>
+        <button type="submit" name="favorite" class="btn btn-secondary">
+          Add to Favorites
+        </button>
+      </div>
+    </div>
+  </form>
+
+  <!-- Weather Cards -->
+  {% if weather %}
+  <div class="row mb-4">
+    <!-- Current weather card -->
+    <div class="col-lg-6 mb-3">
+      <div class="card card-weather">
+        <div class="card-body">
+          <h5 class="card-title">
+            {{ weather.city }}
+          </h5>
+          <p class="text-muted">{{ weather.condition }}</p>
+          <div class="d-flex align-items-center">
+            <!-- Example Icon -->
+            <img
+              src="https://cdn-icons-png.flaticon.com/512/1163/1163661.png"
+              alt="Weather Icon"
+              width="60"
+              height="60"
+              class="me-3"
+            />
+            <h1 class="display-4">{{ weather.temp_c }}°C</h1>
+          </div>
+          <p class="text-muted mt-3">Current Weather</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Today's highlights card -->
+    <div class="col-lg-6 mb-3">
+      <div class="card card-weather h-100">
+        <div class="card-body">
+          <h5 class="card-title">Today's Highlights</h5>
+          <div class="row">
+            <div class="col-6 mb-3">
+              <div class="small text-muted">Humidity</div>
+              <div class="fw-bold">{{ weather.humidity }}%</div>
+            </div>
+            <div class="col-6 mb-3">
+              <div class="small text-muted">Wind</div>
+              <div class="fw-bold">{{ weather.wind_kph }} kph</div>
+            </div>
+            <div class="col-6 mb-3">
+              <div class="small text-muted">Sunrise</div>
+              <div class="fw-bold">{{ weather.sunrise }}</div>
+            </div>
+            <div class="col-6 mb-3">
+              <div class="small text-muted">Sunset</div>
+              <div class="fw-bold">{{ weather.sunset }}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Chance of Rain & 3-Day Forecast -->
+  <div class="row">
+    <!-- Chance of Rain -->
+    <div class="col-lg-4 mb-3">
+      <div class="card card-weather h-100">
+        <div class="card-body">
+          <h5 class="card-title">Chance of Rain</h5>
+          {% if weather.chance_of_rain %}
+            <ul class="list-group list-group-flush">
+              {% for time_label, chance_label in weather.chance_of_rain.items() %}
+              <li class="list-group-item d-flex justify-content-between">
+                <span>{{ time_label }}</span>
+                <span>{{ chance_label }}</span>
+              </li>
+              {% endfor %}
+            </ul>
+          {% else %}
+            <p class="text-muted">No data available</p>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+
+    <!-- 3-Day Forecast -->
+    <div class="col-lg-8 mb-3">
+      <div class="card card-weather h-100">
+        <div class="card-body">
+          <h5 class="card-title">3-Day Forecast</h5>
+          <div class="row">
+            {% for day in weather.forecast_days %}
+            <div class="col-md-4 text-center mb-3">
+              <div>
+                <img
+                  src="https:{{ day.icon }}"
+                  alt="Forecast Icon"
+                  width="40"
+                  height="40"
+                />
+              </div>
+              <div class="mt-2">
+                <strong>{{ day.date }}</strong>
+              </div>
+              <div class="small text-muted">
+                {{ day.low }}°C / {{ day.high }}°C
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endif %}
+
+  <!-- Favorites List -->
+  <div class="mt-5">
+    <h3>Favorites</h3>
+    <ul class="list-group">
+      {% for fav in favorites %}
+      <li class="list-group-item">
+        <a href="{{ url_for('favorite_city', city=fav) }}">{{ fav }}</a>
+      </li>
+      {% endfor %}
+    </ul>
+  </div>
+</div>
+{% endblock %}

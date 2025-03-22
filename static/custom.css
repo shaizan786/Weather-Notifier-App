@@ -1,0 +1,32 @@
+.sidebar {
+  background-color: #2f2c4b;
+  min-height: 100vh;
+  color: #ffffff;
+  width: 240px;
+}
+
+.sidebar .nav-link {
+  color: #aaa;
+  margin-bottom: 0.5rem;
+  border-radius: 6px;
+}
+
+.sidebar .nav-link.active,
+.sidebar .nav-link:hover {
+  color: #fff;
+  background-color: #443f6a;
+}
+
+.main-content {
+  background-color: #f7f7fa;
+  width: 100%;
+  min-height: 100vh;
+  padding: 1rem;
+}
+
+.card-weather {
+  background-color: #fff;
+  border: none;
+  border-radius: 16px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}

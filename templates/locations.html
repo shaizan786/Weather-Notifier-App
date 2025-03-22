@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}Locations{% endblock %}
+{% block content %}
+<div class="p-4">
+  <h1>Favorite Locations</h1>
+  {% with messages = get_flashed_messages() %}
+    {% if messages %}
+      <div class="alert alert-warning">
+        {% for message in messages %}
+          <div>{{ message }}</div>
+        {% endfor %}
+      </div>
+    {% endif %}
+  {% endwith %}
+
+  <ul class="list-group">
+    {% for fav in favorites %}
+    <li class="list-group-item">
+      <a href="{{ url_for('favorite_city', city=fav) }}">{{ fav }}</a>
+    </li>
+    {% endfor %}
+  </ul>
+</div>
+{% endblock %}
